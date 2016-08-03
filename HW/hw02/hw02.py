@@ -27,7 +27,12 @@ def product(n, term):
     >>> product(5, square)   # 1^2 * 2^2 * 3^2 * 4^2 * 5^2
     14400
     """
-    "*** YOUR CODE HERE ***"
+    i = 1
+    res = 1
+    while i <= n:
+        res *= term(i)
+        i += 1
+    return res
 
 def factorial(n):
     """Return n factorial for n >= 0 by calling product.
@@ -40,8 +45,7 @@ def factorial(n):
     >>> check(HW_SOURCE_FILE, 'factorial', ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
-    return _______
+    return product(n, identity)
 
 from operator import add, mul
 
@@ -61,7 +65,13 @@ def accumulate(combiner, base, n, term):
     >>> accumulate(mul, 2, 3, square)   # 2 * 1^2 * 2^2 * 3^2
     72
     """
-    "*** YOUR CODE HERE ***"
+    i = 1
+    res = base
+    while i <= n:
+        res = combiner(res, term(i))
+        i += 1
+    return res
+
 
 def summation_using_accumulate(n, term):
     """Returns the sum of term(1) + ... + term(n). The implementation
@@ -76,8 +86,7 @@ def summation_using_accumulate(n, term):
     ...       ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
-    return _______
+    return accumulate(add, 0, n, term)
 
 def product_using_accumulate(n, term):
     """An implementation of product using accumulate.
@@ -91,8 +100,7 @@ def product_using_accumulate(n, term):
     ...       ['Recursion', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
-    return _______
+    return accumulate(mul, 1, n, term)
 
 def filtered_accumulate(combiner, base, pred, n, term):
     """Return the result of combining the terms in a sequence of N terms
@@ -117,8 +125,17 @@ def filtered_accumulate(combiner, base, pred, n, term):
     ...       ['While', 'For', 'Recursion', 'FunctionDef'])
     True
     """
-    "*** YOUR CODE HERE ***"
-    return _______
+    '''
+    i = 1
+    res = []
+    while i <= n:
+        if pred(term(i)):
+            res.append(term(i))
+        i += 1
+
+    return sum(res)
+    '''
+    return accumulate(lambda x, y: combiner(x, y) if pred(y) else x, base, n, term)
 
 def odd(x):
     return x % 2 == 1
@@ -141,13 +158,33 @@ def repeated(f, n):
     >>> repeated(square, 0)(5)
     5
     """
-    "*** YOUR CODE HERE ***"
+    i = 1
+    g = f
+    if n == 0:
+        return identity
+    while i < n:
+        g = compose1(f, g)
+        i += 1
+    return g
 
 def compose1(f, g):
     """Return a function h, such that h(x) = f(g(x))."""
     def h(x):
         return f(g(x))
     return h
+
+# Alternatives
+
+def repeated2(f, n):
+    def h(x):
+        k = 0
+        while k < n:
+            x, k = f(x), k + 1
+        return x
+    return h
+
+def repeated3(f, n):
+    return accumulate(compose1, f, n-1, lambda k: f)
 
 ###################
 # Extra Questions #

@@ -18,7 +18,7 @@ def is_too_high(guess):
 
 import lab01
 lab01.LOWER = 1
-lab01.UPPER = 100
+lab01.UPPER = 10
 lab01.prompt_for_number = prompt_for_number
 lab01.is_correct = is_correct
 lab01.is_too_high = is_too_high
@@ -29,7 +29,7 @@ from collections import defaultdict
 import sys
 import webbrowser
 
-def get_frequency(algorithm_name, runs=1000):
+def get_frequency(algorithm_name, runs=10):
     """Collect frequencies and plot them."""
     if not hasattr(lab01, algorithm_name):
         raise ValueError('invalid guessing algorithm ({0})'.format(algorithm_name))
@@ -46,6 +46,9 @@ def get_frequency(algorithm_name, runs=1000):
                          'are returning the correct number of guesses!')
     xs = range(1, most_guesses+1)
     ys = [sum(counts[i] for i in range(1, x+1)) for x in xs]
+
+    print(counts)
+    print(xs, ys)
 
     if algorithm_name == 'guess_binary':
         x_axis_string = '|'.join(map(str, xs))
