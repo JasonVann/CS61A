@@ -26,7 +26,14 @@ def repeated(f, n, x):
     >>> repeated(opposite, 3, 0)
     True
     """
-    "*** YOUR CODE HERE ***"
+    g = f(x)
+    while n > 1:
+        h = f(g)    
+        g = h
+        n -= 1;
+    print(g)
+
+# repeated(opposite, 3, 0)
 
 # If Statements
 
@@ -67,7 +74,7 @@ def both_positive(x, y):
     >>> both_positive(1, 1)
     True
     """
-    return x and y > 0 # You can replace this line!
+    return x > 0 and y > 0 # You can replace this line!
 
 # While Loops
 
@@ -83,7 +90,14 @@ def falling(n, k):
     >>> falling(4, 1)  # 4
     4
     """
-    "*** YOUR CODE HERE ***"
+    if k == 0:
+        return 1
+    i = 1
+    res = n
+    while i < k:
+        res *= (n - i)
+        i += 1
+    return res
 
 # Lists
 
@@ -120,7 +134,7 @@ def perfect_number(n):
     True
     """
     all_factors = factors_list(n)
-    "*** YOUR CODE HERE ***"
+    return n == sum(all_factors)
 
 # Guessing Game
 
@@ -143,8 +157,12 @@ def guess_linear():
     """Guess in increasing order and return the number of guesses."""
     prompt_for_number(LOWER, UPPER)
     num_guesses = 1
-    guess = LOWER
-    "*** YOUR CODE HERE ***"
+    guess = LOWER - 1
+    correct = False
+    while not correct:
+        guess = guess + 1 # randomly guess
+        correct = is_correct(guess)   # ask user if guess is correct
+        num_guesses = num_guesses + 1
     return num_guesses
 
 def guess_binary():
@@ -155,12 +173,23 @@ def guess_binary():
     Hint: If you know the guess is greater than the correct number, then your
     algorithm doesn't need to try numbers that are greater than guess.
     """
+    #global UPPER
     prompt_for_number(LOWER, UPPER)
     num_guesses = 1
     lower, upper = LOWER, UPPER
     guess = (lower + upper) // 2
-    "*** YOUR CODE HERE ***"
+    while not is_correct(guess):
+        if is_too_high(guess):
+            upper = guess - 1
+            guess = (lower + upper)//2
+        else:
+            lower = guess + 1
+            guess = (lower + upper)//2
+        num_guesses = num_guesses + 1
     return num_guesses
+
+# python3 guessing_game_graph.py guess_linear
+# python3 guessing_game_graph.py guess_binary
 
 # Receive user input. You do not need to understand the code below this line.
 
