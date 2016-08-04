@@ -20,7 +20,20 @@ def foldl(s, f, start):
     >>> foldl([], sub, 100)   # return start if s is empty
     100
     """
-    "*** YOUR CODE HERE ***"
+    #if len(s) > 0:
+    #    foldl(s[1:], f(start, s[0]), start)
+
+    n = len(s)
+    i = 0
+    res = start
+    while i < n:
+        res = f(res, s[i])
+        start = res
+        i += 1
+    return res
+
+s = [3, 2, 1]
+foldl(s, sub, 0) 
 
 def count_cond(condition):
     """Returns a function with one parameter N that counts all the numbers from
@@ -47,7 +60,17 @@ def count_cond(condition):
     >>> count_primes(20)   # 2, 3, 5, 7, 11, 13, 17, 19
     8
     """
-    "*** YOUR CODE HERE ***"
+    def g(n):
+        i, count = 1, 0
+        while i <= n:
+            if condition(n, i):
+                count += 1
+            i += 1
+        return count
+    return g
+
+count_factors = count_cond(lambda n, i: n % i == 0)
+count_factors(12) 
 
 def cycle(f1, f2, f3):
     """Returns a function that is itself a higher-order function.
