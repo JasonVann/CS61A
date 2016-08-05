@@ -235,6 +235,7 @@ def mul_church(m, n):
     12
     """
     return lambda f: n(m(f))
+three(three(x))
 
 def pow_church(m, n):
     """Return the Church numeral m ** n, for Church numerals m and n.

@@ -98,4 +98,14 @@ def cycle(f1, f2, f3):
     >>> do_two_cycles(1)
     19
     """
-    "*** YOUR CODE HERE ***"
+    def switch(i):
+        return [f1,f2,f3][i%3]
+
+    def make_cycle(n):
+        def apply_n(x):
+            for i in range(n):
+                x = switch(i)(x)
+            return x
+        return apply_n
+    return make_cycle
+
