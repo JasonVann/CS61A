@@ -184,17 +184,75 @@ def ten_pairs(n):
     >>> ten_pairs(9641469)
     6
     """
-    lst = list(str(n))
+    lst = [int(i) for i in str(n)]
+    i = 0
+    count = 0
+    j = 0
+    while i < len(lst) - 1:
+        j = i + 1
+        while j < len(lst):
+            if lst[i] + lst[j] == 10:
+                #print lst[i], lst[j]
+                count += 1
+            j += 1
+        i += 1
+
+    return count
+
+    '''
+    while True:
+        first = lst[0]
+        comple = 10 - lst[0]
+        if comple in lst:
+            lst.remove(first)
+            lst.remove(comple)
+            count += 1
+        else:
+            i += 1
+        if i > len(lst) - 1:
+            break
+    return count
+
     lst = []
     while n > 0:
         lst.append(n%10)
         n = n // 10
 
     def count(i, lst):
-        
+        pass
     print lst
+    '''
 
 ten_pairs(7823952)
+
+def ten_pairs2(n):
+    """Return the number of ten-pairs within positive integer n.
+
+    >>> ten_pairs(7823952)
+    3
+    >>> ten_pairs(55055)
+    6
+    >>> ten_pairs(9641469)
+    6
+    """
+    if n < 10:
+        return 0
+    else:
+        return ten_pairs2(n//10) + count_digit(n//10, 10 - n%10)
+
+def count_digit(n, digit):
+    """Return how many times digit appears in n.
+
+    >>> count_digit(55055, 5)
+    4
+    """
+    if n == 0:
+        return 0
+    else:
+        if n%10 == digit:
+            return count_digit(n//10, digit) + 1
+        else:
+            return count_digit(n//10, digit)
 
 def is_prime(n):
     """Returns True if n is a prime number and False otherwise. 
