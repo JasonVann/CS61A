@@ -10,8 +10,44 @@ def skip_mul(n):
     """
     if n == 0:
         return 0
+    elif n == 1:
+        return 1
     else:
         return n * skip_mul(n - 2)
+
+def count_up1(n):
+    """Print out all numbers up to and including n in ascending order.
+
+    >>> count_up(5)
+    1
+    2
+    3
+    4
+    5
+    """
+    i = 1
+    if i == n:
+        return
+    print(i)
+    i += 1
+    count_up1(n-1)
+
+def count_up2(n):
+    """Print out all numbers up to and including n in ascending order.
+
+    >>> count_up(5)
+    1
+    2
+    3
+    4
+    5
+    """
+    i = 1
+    if i > n:
+        return
+    print(i)
+    i += 1
+    count_up2(n - 1)
 
 def count_up(n):
     """Print out all numbers up to and including n in ascending order.
@@ -24,7 +60,9 @@ def count_up(n):
     5
     """
     def counter(i):
-        "*** YOUR CODE HERE ***"
+        if i <= n:
+            print(i)
+            counter(i+1)
     counter(1)
 
 def gcd(a, b):
@@ -40,7 +78,12 @@ def gcd(a, b):
     >>> gcd(40, 40)
     40
     """
-    "*** YOUR CODE HERE ***"
+    if a < b:
+        a, b = b, a
+    if a % b == 0:
+        return b
+    if a > b:
+        return gcd(b, a % b)
 
 def ab_plus_c(a, b, c):
     """Computes a * b + c.
@@ -52,7 +95,10 @@ def ab_plus_c(a, b, c):
     >>> ab_plus_c(3, 0, 2)  # 3 * 0 + 2
     2
     """
-    "*** YOUR CODE HERE ***"
+    if b > 0:
+        return a + ab_plus_c(a, b-1, c)
+    else:
+        return c
 
 def has_sublist(l, sublist):
     """Returns whether the elements of sublist appear in order anywhere within list l.
@@ -69,7 +115,9 @@ def has_sublist(l, sublist):
     """
     sublist_length = len(sublist)
     l_length = len(l)
-    "*** YOUR CODE HERE ***"
+    if sublist_length > l_length:
+        return False
+
 
 def remove_first(lst, elem):
     """ This function removes the first appearance of elem in list lst.
@@ -83,7 +131,12 @@ def remove_first(lst, elem):
     >>> remove_first([] , 0)
     []
     """
-    "*** YOUR CODE HERE ***"
+    if len(lst) == 0:
+        return []
+    elif elem == lst[0]:
+        return lst[1:]
+    else:
+        return lst[:1] + remove_first(lst[1:], elem)
 
 def sort(lst):
     """This function returns a sorted version of the list lst.
@@ -97,7 +150,13 @@ def sort(lst):
     >>> sort([])
     []
     """ 
-    "*** YOUR CODE HERE ***"
+    if len(lst) > 0:
+        a = min(lst)
+        temp = remove_first(lst, a)
+        blank = []
+        return [a] + sort(temp)
+    else:
+        return []
 
 def interleaved_sum(n, odd_term, even_term):
     """Compute the sum odd_term(1) + even_term(2) + odd_term(3) + ..., up
@@ -107,7 +166,13 @@ def interleaved_sum(n, odd_term, even_term):
     ... interleaved_sum(5, lambda x: x, lambda x: x*x)
     29
     """
-    "*** YOUR CODE HERE ***"
+    def func(i, f1, f2):
+        if i < n:
+            return f1(i) + func(i+1, f2, f1)
+        else:
+            return f1(i)
+    return func(1, odd_term, even_term)
+
 
 def ten_pairs(n):
     """Return the number of ten-pairs within positive integer n.
@@ -119,7 +184,17 @@ def ten_pairs(n):
     >>> ten_pairs(9641469)
     6
     """
-    "*** YOUR CODE HERE ***"
+    lst = list(str(n))
+    lst = []
+    while n > 0:
+        lst.append(n%10)
+        n = n // 10
+
+    def count(i, lst):
+        
+    print lst
+
+ten_pairs(7823952)
 
 def is_prime(n):
     """Returns True if n is a prime number and False otherwise. 
@@ -131,4 +206,33 @@ def is_prime(n):
     >>> is_prime(521)
     True
     """
-    "*** YOUR CODE HERE ***"
+    def incre(i):
+        if i ** 2 > n:
+            return True
+        elif n % i == 0:
+            return False
+        else:
+            return incre(i+1)
+    if n <= 2:
+        return True
+    else:
+        print incre(2)
+
+def is_prime2(n):
+    """Returns True if n is a prime number and False otherwise. 
+
+    >>> is_prime(2)
+    True
+    >>> is_prime(16)
+    False
+    >>> is_prime(521)
+    True
+    """
+    import math
+    def helper(i):
+        if i < math.sqrt(n): #could replace with i == 1
+            return True
+        if n % i == 0:
+            return False
+        return helper(i - 1)
+    return helper(n - 1)
