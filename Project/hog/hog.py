@@ -5,6 +5,16 @@ from ucb import main, trace, log_current_line, interact
 
 GOAL_SCORE = 100  # The goal of Hog is to score 100 points.
 
+# Rules
+# Pig Out. If any of the dice outcomes is a 1, the current player's score for the turn is 1.
+# Free Bacon. A player who chooses to roll zero dice scores one more than the largest digit in the opponent's total score.
+# Hogtimus Prime. If a player's score for the turn is a prime number, then the turn score is increased to the next larger prime number. 
+#   For example, if the dice outcomes sum to 19, the current player scores 23 points for the turn. This boost only applies to the current player. 
+#   Note: 1 is not a prime number!
+# Hog Wild. If the sum of both players' total scores is a multiple of seven (e.g., 14, 21, 35), then the current player rolls four-sided dice instead of 
+#   the usual six-sided dice.
+# Hog Tied. If the sum of both players' scores ends in a seven (e.g., 17, 27, 57), then the current player can roll at most one dice.
+# Swine Swap. After the turn score is added, if the current player's total score contains only one unique digit, the players swap total scores.
 
 ######################
 # Phase 1: Simulator #
@@ -106,7 +116,10 @@ def max_dice(score, opponent_score):
     OPPONENT_SCORE ends in a 7, in which case the player can roll at most 1.
     """
     # BEGIN PROBLEM 3
-    if (score + opponent_score) % 7 == 0:
+    sum_score = (score + opponent_score)
+    if (sum_scores >= 100 and sum_scores % 100 == 7):
+        return 1
+    elif (sum_scores < 100 and sum_scores % 10 == 7):
         return 1
     else:
         return 10
@@ -159,7 +172,7 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
         new0 = take_turn(num_dice0, score1, dice0)
         score0 += new0
         
-        if(score0 % 10 == score1 // 10 % 10) and (score0 // 10 % 10 == score1 % 10):
+        if is_swap(score0):
             # Swine Swap
             score0, score1 = score1, score0
 
@@ -169,7 +182,8 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
         
         score1 += new1
 
-        if(score0 % 10 == score1 // 10 % 10) and (score0 // 10 % 10 == score1 % 10):
+        #if(score0 % 10 == score1 // 10 % 10) and (score0 // 10 % 10 == score1 % 10):
+        if is_swap(score1):
             # Swine Swap
             score0, score1 = score1, score0
 
