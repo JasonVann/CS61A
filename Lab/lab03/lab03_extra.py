@@ -100,6 +100,47 @@ def ab_plus_c(a, b, c):
     else:
         return c
 
+def has_sublist0(l, sublist):
+    """Returns whether the elements of sublist appear in order anywhere within list l.
+    >>> has_sublist([], [])
+    True
+    >>> has_sublist([3, 3, 2, 1], [])
+    True
+    >>> has_sublist([], [3, 3, 2, 1])
+    False
+    >>> has_sublist([3, 3, 2, 1], [3, 2, 1])
+    True
+    >>> has_sublist([3, 2, 1], [3, 2, 1])
+    True
+    """
+    sublist_length = len(sublist)
+    l_length = len(l)
+    if sublist_length > l_length:
+        return False
+    i = 0
+    j = 0
+    if sublist_length == 0:
+        return True
+
+    while i < l_length:
+        
+        while j < sublist_length:
+            if l[i] == sublist[j]:
+                j += 1
+                i += 1
+            else:
+                if j > 0:
+                    j = 0
+                else:
+                    i += 1
+
+            if j == sublist_length - 1:
+                return True
+            if i == l_length - 1:
+                return False
+
+    return False
+
 def has_sublist(l, sublist):
     """Returns whether the elements of sublist appear in order anywhere within list l.
     >>> has_sublist([], [])
@@ -117,7 +158,10 @@ def has_sublist(l, sublist):
     l_length = len(l)
     if sublist_length > l_length:
         return False
-
+    elif l[0: sublist_length] == sublist:
+        return True
+    else:
+        return has_sublist(l[1:], sublist)
 
 def remove_first(lst, elem):
     """ This function removes the first appearance of elem in list lst.
