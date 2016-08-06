@@ -13,7 +13,13 @@ def hailstone(n):
     >>> a
     7
     """
-    "*** YOUR CODE HERE ***"
+    print n
+    if n == 1:
+        return 1
+    elif n % 2 == 0:
+        return 1 + hailstone(n/2)
+    else:
+        return 1 + hailstone(n*3+1)
 
 def symmetric(l):
     """Returns whether a list is symmetric. 
@@ -28,4 +34,9 @@ def symmetric(l):
     >>> symmetric(['l', 'o', 'l'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    if len(l) <= 1:
+        return True
+    elif l[0] == l[-1]:
+        return symmetric(l[1:-1])
+    else:
+        return False
