@@ -100,9 +100,26 @@ def pingpong(n):
     True
     """
     from operator import add, sub
+
+    def recur(i, res, fn):
+        #print('a', i, res, fn == add)
+        if i > n:
+            return res
+        if i != 0 and (i % 7 == 0 or has_seven(i)):
+            if fn == add:
+                return recur(i + 1, fn(res, 1), sub)
+            else:
+                return recur(i + 1, fn(res, 1), add)
+        else:
+            return recur(i + 1, fn(res, 1), fn)
+
+    return recur(1, 0, add)
+
+    '''
     i = 1
     res = 0
     fn = add
+
     while i <= n:
         #print('a0', i, res)
         if i != 0 and (i % 7 == 0 or has_seven(i)):
@@ -117,6 +134,7 @@ def pingpong(n):
             res = fn(res, 1)
         i += 1
     return res
+    '''
 
 def has_seven(k):
     """Returns True if at least one of the digits of k is a 7, False otherwise.
