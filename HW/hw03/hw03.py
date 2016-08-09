@@ -17,7 +17,10 @@ def g(n):
     >>> check(HW_SOURCE_FILE, 'g', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    if n <= 3:
+        return n
+    else:
+        return g(n-1) + 2 * g(n-2) + 3 * g(n-3)
 
 def g_iter(n):
     """Return the value of G(n), computed iteratively.
@@ -36,7 +39,34 @@ def g_iter(n):
     >>> check(HW_SOURCE_FILE, 'g_iter', ['Recursion'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    #def iter_helper(n, g1, g2, g3):
+    gn = []
+    for i in range(1, 4):
+        gn.append(i)
+
+    #print(gn)
+    if n <= 3:
+        return n
+    else:
+        i = 4
+        while i <= n:
+            gi = gn[i-2] + 2*gn[i-3] + 3*gn[i-4]
+            gn.append(gi)
+
+            i += 1
+    #print(gn)
+    return gn[n-1]
+
+def g_iter2(n):
+    # sol
+    if n == 1 or n == 2 or n == 3:
+        return n
+    a, b, c = 1, 2, 3
+    while n > 3:
+        a, b, c = b, c, c + 2*b + 3*a
+        n = n - 1
+    return c
+
 
 def pingpong(n):
     """Return the nth element of the ping-pong sequence.
@@ -69,7 +99,24 @@ def pingpong(n):
     >>> check(HW_SOURCE_FILE, 'pingpong', ['Assign', 'AugAssign'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    from operator import add, sub
+    i = 1
+    res = 0
+    fn = add
+    while i <= n:
+        #print('a0', i, res)
+        if i != 0 and (i % 7 == 0 or has_seven(i)):
+            #print('a', res, fn == add)
+            res = fn(res, 1)
+            if fn == add:
+                #print('b')
+                fn = sub
+            else:
+                fn = add
+        else:
+            res = fn(res, 1)
+        i += 1
+    return res
 
 def has_seven(k):
     """Returns True if at least one of the digits of k is a 7, False otherwise.
