@@ -171,7 +171,35 @@ def count_change(amount):
     >>> count_change(100)
     9828
     """
-    "*** YOUR CODE HERE ***"
+    def find_max_sub(amount):
+        """Find the max nuber that is a power of 2 and less than amount"""
+        i = 1
+        while i <= amount:
+            #print(i)
+            i = i * 2
+        return i // 2
+
+
+    def recur(amount, max_coin):
+        if amount == 0:
+            #print('b', amount, max_coin)
+            return 1
+        elif amount < 0:
+            return 0
+        elif max_coin == 0:
+            return 0
+        else:
+            m = find_max_sub(max_coin)
+            #print('a', amount, m)
+            use_m = recur(amount - m, m)
+            no_m = recur(amount, m // 2)
+
+            return use_m + no_m
+
+    m = find_max_sub(amount)
+
+    return recur(amount, m)
+
 
 def print_move(origin, destination):
     """Print instructions to move a disk."""
@@ -205,7 +233,32 @@ def move_stack(n, start, end):
     Move the top disk from rod 1 to rod 3
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
-    "*** YOUR CODE HERE ***"
+    all_pos = [1, 2, 3]
+    alter = [x for x in all_pos if x != start and x != end][0]
+
+    if n == 1:
+        print_move(start, end)
+    else:
+        move_stack(n - 1, start, alter)
+        move_stack(1, start, end)
+        move_stack(n - 1, alter, end)
+
+    '''
+    if n == 1:
+        print_move(start, end)
+    else:
+        if n % 2 == 0: 
+            print_move(start, alter)
+            move_stack(n - 1, start, end)
+            print_move(alter, end)
+        else:
+            print_move(start, end)
+            #if n > 2:
+            move_stack(n - 1, start, alter)
+            print_move(end, alter)
+        #move_stack(n - 1, start, end)
+        #move_stack(n - 1, end, alter)
+    '''
 
 def flatten(lst):
     """Returns a flattened version of lst.
