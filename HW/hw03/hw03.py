@@ -272,7 +272,12 @@ def flatten(lst):
     >>> flatten(x)
     [1, 1, 1, 1, 1, 1]
     """
-    "*** YOUR CODE HERE ***"
+    if len(lst) < 1:
+        return lst
+    elif type(lst[0]) == list:
+        return flatten(lst[0]) + flatten(lst[1:])
+    else:
+        return [lst[0]] + flatten(lst[1:])
 
 def merge(lst1, lst2):
     """Merges two sorted lists.
@@ -286,7 +291,37 @@ def merge(lst1, lst2):
     >>> merge([5, 7], [2, 4, 6])
     [2, 4, 5, 6, 7]
     """
-    "*** YOUR CODE HERE ***"
+    res = []
+    i = 0
+    j = 0
+    if not lst1:
+        return lst2
+    if not lst2:
+        return lst1
+
+    while True:
+        #print(i, j)
+        if lst1[i] <= lst2[j]:
+            res.append(lst1[i])
+            i += 1
+        else:
+            res.append(lst2[j])
+            j += 1
+        if i == len(lst1):
+            if j == len(lst2) - 1:
+                res.append(lst2[j])
+            else:
+                res.extend([lst2[j:]])
+            break
+        elif j == len(lst2):
+            if i == len(lst1) - 1:
+                res += [lst1[i]]
+            else:
+                res += lst1[i:]
+            break
+
+    return res
+
 
 def mergesort(seq):
     """Mergesort algorithm.
