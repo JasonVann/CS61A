@@ -309,9 +309,12 @@ def merge(lst1, lst2):
             j += 1
         if i == len(lst1):
             if j == len(lst2) - 1:
+                #print('c', res, lst2[j:])
                 res.append(lst2[j])
             else:
-                res.extend([lst2[j:]])
+                #print('d', res, lst2[j:], lst2, j)
+                res.extend(lst2[j:])
+                #res += lst2[j:]
             break
         elif j == len(lst2):
             if i == len(lst1) - 1:
@@ -322,6 +325,25 @@ def merge(lst1, lst2):
 
     return res
 
+def merge2(lst1, lst2):
+    """Sol: Merges two sorted lists.
+
+    >>> merge([1, 3, 5], [2, 4, 6])
+    [1, 2, 3, 4, 5, 6]
+    >>> merge([], [2, 4, 6])
+    [2, 4, 6]
+    >>> merge([1, 2, 3], [])
+    [1, 2, 3]
+    >>> merge([5, 7], [2, 4, 6])
+    [2, 4, 5, 6, 7]
+    """
+    # recursive
+    if not lst1 or not lst2:
+        return lst1 + lst2
+    elif lst1[0] < lst2[0]:
+        return [lst1[0]] + merge2(lst1[1:], lst2)
+    else:
+        return [lst2[0]] + merge2(lst1, lst2[1:])
 
 def mergesort(seq):
     """Mergesort algorithm.
@@ -333,7 +355,46 @@ def mergesort(seq):
     >>> mergesort([1])   # sorting a one-element list
     [1]
     """
-    "*** YOUR CODE HERE ***"
+    if len(seq) <= 1:
+        return seq
+
+    '''
+    if len(seq) == 2:
+        if seq[0] > seq[1]:
+            temp = seq[0]
+            seq[0] = seq[1]
+            seq[1] = temp
+        return seq
+    '''
+
+    mid = len(seq) // 2
+    a = mergesort(seq[:mid])
+    b = mergesort(seq[mid:])
+
+    seq = merge(a, b)
+
+    return seq
+
+# Iterative solution
+def mergesort_iter(seq):
+    """Mergesort algorithm.
+
+    >>> mergesort_iter([4, 2, 5, 2, 1])
+    [1, 2, 2, 4, 5]
+    >>> mergesort_iter([])     # sorting an empty list
+    []
+    >>> mergesort_iter([1])   # sorting a one-element list
+    [1]
+    """
+    if not seq:
+        return []
+    queue = [[elem] for elem in seq]
+    while len(queue) > 1:
+        first, second = queue[0], queue[1]
+        print(first, second)
+        queue = queue[2:] + [merge(first, second)]
+    return queue[0]
+
 
 ###################
 # Extra Questions #
