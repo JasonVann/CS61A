@@ -393,6 +393,8 @@ def mergesort_iter(seq):
         first, second = queue[0], queue[1]
         print(first, second)
         queue = queue[2:] + [merge(first, second)]
+        print('a', queue)
+    print(queue)
     return queue[0]
 
 
@@ -408,7 +410,7 @@ def Y(f):
 
 
 def Y_tester():
-    """
+    """ Sol
     >>> tmp = Y_tester()
     >>> tmp(1)
     1
@@ -417,5 +419,4 @@ def Y_tester():
     >>> tmp(2)
     2
     """
-    "*** YOUR CODE HERE ***"
-    return Y(________)  # Replace 
+    return Y(lambda f: lambda n: 1 if n==0 else n * f()(n-1))
