@@ -118,5 +118,62 @@ def polynomial(x, c):
     >>> str_interval(polynomial(interval(0.5, 2.25), [10, 24, -6, -8, 3]))
     '18.0 to 23.0'
     """
-    "*** YOUR CODE HERE ***"
+    def add_fn(coeff, k, f):
+        return lambda x: coeff * pow(x, k) + f(x)
 
+    def add_dfn(coeff, k, df):
+        return lambda x: k * coeff * pow(x, k-1) + df(x)
+
+    def add_ddfn(coeff, k, ddf):
+        return lambda x: k * (k-1) * coeff * pow(x, k-2) + ddf(x)
+
+    # Define the polynomial and its first and second derivatives.
+    f = lambda x: 0
+    df = lambda x: 0
+    ddf = lambda x: 0
+    for k, coeff in enumerate(c):
+        f = add_fn(coeff, k, f)
+        if k > 0:
+            df = add_dfn(coeff, k, df)
+        if k > 1:
+            ddf = add_ddfn(coeff, k, ddf)
+
+    # Find as many extreme points as we can using Newton's method
+    lower, upper = lower_bound(x), upper_bound(x)
+    num_steps = 20
+    step = (upper - lower) / num_steps
+    starts = [lower + k * step for k in range(num_steps)]
+    extremums = [find_zero(df, ddf, n) for n in starts]
+
+    # Filter for the interval x and return
+    ns = [n for n in extremums if n > lower and n < upper] + [lower, upper]
+    values = [f(n) for n in ns]
+    #print(values)
+    return interval(min(values), max(values))
+
+# Newton's method from lecture
+
+def improve(update, close, guess=1, max_updates=100):
+    """Iteratively improve guess with update until close(guess) is true or
+    max_updates have been applied."""
+    k = 0
+    while not close(guess) and k < max_updates:
+        guess = update(guess)
+        k = k + 1
+    return guess
+
+def approx_eq(x, y, tolerance=1e-15):
+    return abs(x - y) < tolerance
+
+def find_zero(f, df, guess=1):
+    """Return a zero of the function f with derivative df."""
+    def near_zero(x):
+        return approx_eq(f(x), 0)
+    return improve(newton_update(f, df), near_zero, guess)
+
+def newton_update(f, df):
+    """Return an update function for f with derivative df,
+    using Newton's method."""
+    def update(x):
+        return x - f(x) / df(x)
+    return update
