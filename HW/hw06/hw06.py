@@ -198,7 +198,40 @@ class VendingMachine:
     >>> w.vend()
     'Here is your soda.'
     """
-    "*** YOUR CODE HERE ***"
+    def __init__(self, product, price):
+        self.price = price
+        self.quantity = 0
+        self.product = product
+        self.dollar = 0
+
+    def vend(self):
+        if self.quantity <= 0:
+            return 'Machine is out of stock.'
+        elif self.price > self.dollar:
+
+            return 'You must deposit $' + str(self.price - self.dollar) + ' more.'
+        elif self.price < self.dollar:
+            output = 'Here is your ' + self.product + ' and $' + str(self.dollar - self.price) + ' change.'
+            quantity = self.dollar // self.price
+            self.quantity -= quantity
+            self.dollar = 0
+            return output
+        else:
+            quantity = self.dollar // self.price
+            self.quantity -= quantity
+            self.dollar = 0
+            return 'Here is your ' + self.product + '.'
+
+    def restock(self, amt):
+        self.quantity += amt
+        return 'Current ' + self.product + ' stock: ' + str(self.quantity)
+        # return 'Current {0} stock: {1}'.format(self.product, self.stock)
+
+    def deposit(self, dollar_amt):
+        if self.quantity <= 0:
+            return 'Machine is out of stock. Here is your $' + str(dollar_amt) + '.'
+        self.dollar += dollar_amt
+        return 'Current balance: $' + str(self.dollar)
 
 class MissManners:
     """A container class that only forward messages that say please.
@@ -231,7 +264,24 @@ class MissManners:
     >>> really_fussy.ask('please ask', 'please deposit', 10)
     'Current balance: $10'
     """
-    "*** YOUR CODE HERE ***"
+    def __init__(self, object):
+        self.object = object
+
+    def ask(self, sent, amount = None):
+        if 'please' not in sent:
+            return 'You must learn to say please first.'
+        else:
+            #action = sent.split('please ')[1]
+            action = sent[7:]
+            if not hasattr(self.object, action):
+
+                return 'Thanks for asking, but I know not how to ' + action + '.'
+            elif amount is not None:
+                #print('b', action, amount)
+                return getattr(self.object, action)(amount)
+            else:
+                return getattr(self.object, action)()
+
 
 #############
 # Challenge #
