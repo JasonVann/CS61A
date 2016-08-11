@@ -2,6 +2,45 @@
 # Mutation #
 ############
 
+def make_withdraw0(balance):
+    """Return a withdraw function with BALANCE as its starting balance.
+    >>> withdraw = make_withdraw0(1000)
+    >>> withdraw(100)
+    900
+    >>> withdraw(100)
+    800
+    >>> withdraw(900)
+    'Insufficient funds'
+    """
+
+    #attempts = []
+    #password = 'a'
+    '''
+    def withdraw(amount):
+        #nonlocal password
+        #nonlocal attempts
+        nonlocal balance
+        if amount > balance:
+           return 'Insufficient funds'
+        balance = balance - amount
+        return balance
+    return withdraw
+    '''
+    def withdraw(amount):
+        nonlocal balance
+        if amount > balance:
+           return 'Insufficient funds'
+        balance = balance - amount
+        return balance
+    return withdraw
+
+'''
+wd = make_withdraw0(20)
+wd2 = make_withdraw0(7)
+print(wd2(6))
+print(wd(8))
+'''
+
 def make_withdraw(balance, password):
     """Return a password-protected withdraw function.
 
@@ -25,7 +64,27 @@ def make_withdraw(balance, password):
     >>> w(10, 'l33t')
     "Your account is locked. Attempts: ['hwat', 'a', 'n00b']"
     """
-    "*** YOUR CODE HERE ***"
+    attempts = []
+
+    def withdraw(amount, pw):
+        nonlocal balance
+        nonlocal password
+        nonlocal attempts
+        if password == pw and len(attempts) < 3:
+            if amount > balance:
+               return 'Insufficient funds'
+            balance = balance - amount
+            return balance
+        else:
+            if len(attempts) < 3:
+                attempts.append(pw)
+                return 'Incorrect password'
+            else:
+                #print(attempts)
+                return 'Your account is locked. Attempts: ' + str(attempts)
+        
+    return withdraw
+
 
 def make_joint(withdraw, old_password, new_password):
     """Return a password-protected withdraw function that has joint access to
@@ -65,7 +124,42 @@ def make_joint(withdraw, old_password, new_password):
     >>> make_joint(w, 'hax0r', 'hello')
     "Your account is locked. Attempts: ['my', 'secret', 'password']"
     """
-    "*** YOUR CODE HERE ***"
+    balance = 0
+    attempts = []
+
+    def withdraw_join(amount, pw):
+        nonlocal balance
+        nonlocal attempts
+        if pw == old_password or pw == new_password:
+            return withdraw(amount, old_password)
+        else:
+            return withdraw(amount, pw)
+        '''
+        else:
+            if len(attempts) < 3:
+                attempts.append(pw)
+                return 'Incorrect password'
+            else:
+                #print(attempts)
+                return 'Your account is locked. Attempts: ' + str(attempts)
+        '''
+
+    error = withdraw(0, old_password)
+    if type(error) == str:
+        return error
+
+    return withdraw_join
+
+'''
+w = make_withdraw(100, 'hax0r')
+w(25, 'hax0r')
+make_joint(w, 'my', 'secret')
+j = make_joint(w, 'hax0r', 'secret')
+w(25, 'secret')
+j(25, 'secret')
+j(25, 'hax0r')
+j(100, 'secret')
+'''
 
 ###########
 # Objects #
