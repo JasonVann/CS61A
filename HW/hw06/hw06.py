@@ -267,6 +267,7 @@ class MissManners:
     def __init__(self, object):
         self.object = object
 
+    '''
     def ask(self, sent, amount = None):
         if 'please' not in sent:
             return 'You must learn to say please first.'
@@ -281,7 +282,20 @@ class MissManners:
                 return getattr(self.object, action)(amount)
             else:
                 return getattr(self.object, action)()
+    '''
+    def ask(self, sent, *args):
+        if 'please' not in sent:
+            return 'You must learn to say please first.'
+        else:
+            #action = sent.split('please ')[1]
+            action = sent[7:]
+            if not hasattr(self.object, action):
 
+                return 'Thanks for asking, but I know not how to ' + action + '.'
+
+            #print('c', action, *args)
+            return getattr(self.object, action)(*args)
+    
 
 #############
 # Challenge #
@@ -294,18 +308,22 @@ def make_instance(cls):
     attributes = {}  # instance attributes, e.g. {'a': 6, 'b': 1}
 
     def get_value(name):
-        "*** YOUR CODE HERE ***"
+        if name in attributes:  # name is an instance attribute
+            return attributes[name]
+        value = cls['get'](name)  # look up name in class
+        return (bind_method(value, instance) if callable(value) else value)
 
     def set_value(name, value):
-        "*** YOUR CODE HERE ***"
+        attributes[name] = value # assignment creates/modifies instance attrs
 
     instance = {'get': get_value, 'set': set_value} # dispatch dictionary
     return instance
 
 def bind_method(function, instance):
-    "*** YOUR CODE HERE ***"
+    return lambda *args: function(instance, *args)
 
 def make_class(attributes={}):
+    # Sol from webpage
     def get_value(name):
         if name in attributes: # name is a class attribute
             return attributes[name]
@@ -323,7 +341,10 @@ def make_class(attributes={}):
     return cls
 
 def init_instance(instance, *args):
-    "*** YOUR CODE HERE ***"
+    init = instance['get']('__init__')
+    if callable(init):
+        init(*args)
+    return instance
 
 def make_account_class():
     """Return the Account class, which has deposit and withdraw methods.
