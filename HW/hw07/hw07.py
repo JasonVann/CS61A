@@ -32,7 +32,12 @@ def link_to_list(link):
     >>> link_to_list(Link.empty)
     []
     """
-    "*** YOUR CODE HERE ***"
+    res = []
+    while link != Link.empty:
+        res += [link.first]
+        link = link.rest
+
+    return res
 
 # Q2 (and Extra Question)
 
