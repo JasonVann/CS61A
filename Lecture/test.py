@@ -39,4 +39,25 @@ class Account:
         self.balance = 0
         self.holder = account_holder
 
+count_foo = 0
+count_bar = 0
+
+def bar(n):
+    global count_bar
+    print('a', n, count_bar, count_foo)
+    count_bar += 1
+    if n % 2 == 1:
+        return n + 1
+    return n
+
+def foo(n):
+    global count_foo
+    count_foo += 1
+    if n < 1:
+        return 2
+    if n % 2 == 0:
+        return foo(n - 1) + foo(n - 2)
+    else:
+        return 1 + foo(n - 2)
+
 
