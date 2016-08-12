@@ -148,7 +148,11 @@ def reverse_iterative(s):
     >>> print_link(reversed_primes)
     7 5 3 2
     """
-    "*** YOUR CODE HERE ***"
+    res = empty
+    while s != empty:
+        res = link(first(s), res)
+        s = rest(s)
+    return res
 
 def reverse_recursive(s):
     """Return a reversed version of a linked list s.
@@ -158,7 +162,17 @@ def reverse_recursive(s):
     >>> print_link(reversed_primes)
     7 5 3 2
     """
-    "*** YOUR CODE HERE ***"
+    def recur(s, res):
+        #print('a', s)
+        if s == empty:
+            #print('b', s)
+            return res
+        else:
+            #print('c', s)
+            return recur(rest(s), link(first(s), res))
+
+    return recur(s, empty)
+
 
 def kth_last(lst, k):
     """Return the kth to last element of `lst`.
@@ -169,4 +183,66 @@ def kth_last(lst, k):
     >>> print(kth_last(lst, 5))
     None
     """
-    "*** YOUR CODE HERE ***"
+    lst = reverse_iterative0(lst)
+    i = 0
+    while True:
+        if lst == empty:
+            return None
+        else:
+            if i == k:
+                return first(lst)
+            else:
+                i += 1
+                lst = rest(lst)
+
+# Sol from webpage
+def kth_last(lst, k):
+    """Return the kth to last element of `lst`.
+
+    >>> lst = link(1, link(2, link(3, link(4))))
+    >>> kth_last(lst, 0)
+    4
+    >>> print(kth_last(lst, 5))
+    None
+    """
+
+    # Iterative Version
+    ahead = lst
+    for _ in range(k):
+        if ahead == empty:
+            return None
+        ahead = rest(ahead)
+    start = lst
+    print('a', ahead, start)
+    while rest(ahead) != empty:
+        ahead = rest(ahead)
+        start = rest(start)
+    if start == empty:
+        return None
+    return first(start)
+
+    # Recursive Version
+    def unwind_rewind(lst):
+        if lst == empty:
+            return (k, None, False)
+        previous_k, kth_element, found = unwind_rewind(rest(lst))
+
+        print('a', lst, k, previous_k, kth_element, found)
+        if found:
+            return (0, kth_element, True)
+        if previous_k == 0 and not found:
+            return  (0, first(lst), True)
+        return (previous_k-1, kth_element, False)
+    #return unwind_rewind(lst)[1]
+
+    #k = 0
+    # Alternate
+    def unwind_rewind(lst):
+        if lst == empty:
+            return
+        unwind_rewind(rest(lst))
+        nonlocal k
+        if k == 0:
+            return first(lst)
+        k -= 1
+    #return unwind_rewind(lst)
