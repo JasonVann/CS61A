@@ -75,7 +75,15 @@ def make_pytunes(username):
         darude
           sandstorm
     """
-    "*** YOUR CODE HERE ***"
+    return tree(username, 
+                [tree('pop', 
+                    [tree('justin bieber', 
+                        [tree('single', 
+                            [tree('what do you mean?')])]), 
+                    tree('2015 pop mashup')]), 
+                tree('trance', 
+                    [tree('darude', 
+                        [tree('sandstorm')])])])
 
 def num_songs(t):
     """Return the number of songs in the pyTunes tree, t.
@@ -84,7 +92,27 @@ def num_songs(t):
     >>> num_songs(pytunes)
     3
     """
-    "*** YOUR CODE HERE ***"
+    #print('a')
+    #print_tree(t)
+    if is_leaf(t):
+        return 1
+    else:
+        node, tree = entry(t), children(t)
+        if len(tree) > 1:
+            return num_songs(tree[0]) + num_songs(tree[1])
+        else:
+            return num_songs(tree[0])
+
+def num_songs2(t):
+    """Return the number of songs in the pyTunes tree, t.
+
+    >>> pytunes = make_pytunes('i_love_music')
+    >>> num_songs(pytunes)
+    3
+    """
+    if is_leaf(t):
+        return 1
+    return sum([num_songs2(b) for b in children(t)])
 
 def add_song(t, song, category):
     """Returns a new tree with SONG added to CATEGORY. Assume the CATEGORY
@@ -103,7 +131,28 @@ def add_song(t, song, category):
           georgia
 
     """
-    "*** YOUR CODE HERE ***"
+    '''
+    node, tree = entry(t), children(t)
+    #print(node, tree)
+    while node != category:
+        node = entry(tree)
+        tree = children(node)
+        node = node[0]
+        #print('b', node, tree)
+    print('c', tree)
+    tree = tree + [song]
+    print('d', tree)
+    print('e', t)
+    '''
+
+    if(entry(t) == category):
+        return tree(entry(t), children(t) + [tree(song)])
+
+    kept_children = []
+    for b in children(t):
+        kept_children += [add_song(b, song, category)]
+    #print(kept_children)
+    return tree(entry(t), kept_children)
 
 def delete(t, target):
     """Returns the tree that results from deleting TARGET from t. If TARGET is
@@ -125,7 +174,18 @@ def delete(t, target):
         gangnam style
         wedding dress
     """
-    "*** YOUR CODE HERE ***"
+    #if entry(t) == target:
+    #   return None
+    '''
+    all = [delete(b, target) for b in children(t) if entry(t) != target]
+    print('a', all)
+    return tree(entry(t), all)
+    '''
+    kept_children = []
+    for b in children(t):
+        if entry(b) != target:
+            kept_children += [delete(b, target)]
+    return tree(entry(t), kept_children)
 
 # Tree ADT
 def tree(entry, children=[]):
