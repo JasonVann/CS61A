@@ -35,3 +35,26 @@ def prune(t, k):
     else:
         return tree(entry(t), [prune(child, k - 1) for child in children(t)]
 
+def print_tree(t, indent=0):
+    """Print a representation of this tree in which each node is
+    indented by two spaces times its depth from the entry.
+
+    >>> print_tree(tree(1))
+    1
+    >>> print_tree(tree(1, [tree(2)]))
+    1
+      2
+    >>> numbers = tree(1, [tree(2), tree(3, [tree(4), tree(5)]), tree(6, [tree(7)])])
+    >>> print_tree(numbers)
+    1
+      2
+      3
+        4
+        5
+      6
+        7
+    """
+    print('  ' * indent + str(entry(t)))
+    for child in children(t):
+        print_tree(child, indent + 1)
+
