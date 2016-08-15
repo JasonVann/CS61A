@@ -16,4 +16,13 @@ def vending_machine(snacks):
     >>> vender()
     'chocolate'
     """
-    "*** YOUR CODE HERE ***"
+    i = 0
+    def cycle():
+        nonlocal i
+        #print(snacks[i])
+        snack = snacks[i]
+        i += 1
+        if i >= len(snacks):
+            i = 0
+        return snack
+    return cycle
