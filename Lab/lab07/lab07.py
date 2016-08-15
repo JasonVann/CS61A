@@ -268,6 +268,7 @@ def add_trees(t1, t2):
         5
       5
     """
+    # Sol from webpage
     if not t1:
         return t2
     if not t2:
