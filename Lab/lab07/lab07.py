@@ -38,7 +38,20 @@ def abundant(n):
     True
 
     """
-    "*** YOUR CODE HERE ***"
+    i = 1
+    res = []
+    while i * i <= n:
+        if n % i == 0:
+            print(i, '*', n//i)
+            res.extend([i, n//i])
+        i += 1
+    res.remove(n)
+    res.remove(1)
+    res = set(res)
+    if sum(res) > n:
+        return True
+    else:
+        return False
 
 # Q2
 def same_hailstone(a, b):
@@ -54,7 +67,26 @@ def same_hailstone(a, b):
     False
 
     """
-    "*** YOUR CODE HERE ***"
+    n = a
+    while n != 1:
+        if n == b:
+            return True
+        if n % 2 == 0:
+            n = n/2
+        else:
+            n = n * 3 + 1
+
+    # Then try b
+    n = b
+    while n != 1:
+        if n == a:
+            return True
+        if n % 2 == 0:
+            n = n/2
+        else:
+            n = n * 3 + 1
+    
+    return False
 
 # Q3
 def piecewise(f, g, b):
@@ -72,7 +104,7 @@ def piecewise(f, g, b):
     >>> abs_value(-1)
     1
     """
-    "*** YOUR CODE HERE ***"
+    return lambda x: f(x) if x < b else g(x)
 
 # Q4
 def smooth(f, dx):
@@ -84,7 +116,7 @@ def smooth(f, dx):
     >>> round(smooth(square, 1)(0), 3)
     0.667
     """
-    "*** YOUR CODE HERE ***"
+    return lambda x: (f(x+dx) + f(x) + f(x - dx))/3
 
 def n_fold_smooth(f, dx, n):
     """Returns the n-fold smoothed version of f
@@ -93,7 +125,7 @@ def n_fold_smooth(f, dx, n):
     >>> round(n_fold_smooth(square, 1, 3)(0), 3)
     2.0
     """
-    "*** YOUR CODE HERE ***"
+    return repeated(lambda g: smooth(g, dx), n)(f)
 
 def repeated(f, n):
     """Returns a single-argument function that takes a value, x, and applies
@@ -123,9 +155,10 @@ def is_palindrome(n):
     True
     """
     x, y = n, 0
-    f = lambda: _____
+    f = lambda: 10*y + x % 10
     while x > 0:
-        x, y = _____, f()
+        x, y = x // 10, f()
+        #print(x, y)
     return y == n
 
 # Q7
@@ -139,7 +172,14 @@ def deep_len(lnk):
             link(3, empty)), link(link(4, empty), link(5, empty))))
     5
     """
-    "*** YOUR CODE HERE ***"
+    if not is_link(lnk):
+        return 1
+
+    if lnk == empty:
+        return 0
+
+    #if is_link(lnk):
+    return deep_len(first(lnk)) + deep_len(rest(lnk))
 
 # Q8
 def make_to_string(front, mid, back, empty_repr):
@@ -157,7 +197,13 @@ def make_to_string(front, mid, back, empty_repr):
     >>> brians_to_string(empty)
     '()'
     """
-    "*** YOUR CODE HERE ***"
+    # This won't work for nested linked list
+    def rep(lnk):
+        if lnk == empty:
+            return empty_repr
+        return front + str(first(lnk)) + mid + rep(rest(lnk)) + back
+
+    return rep
 
 # Q9
 def tree_map(fn, t):
@@ -182,7 +228,9 @@ def tree_map(fn, t):
           128
         256
     """
-    "*** YOUR CODE HERE ***"
+    if is_tree(t):
+        first = entry(t)
+        return tree(fn(first), [tree_map(fn, t) for t in children(t)])
 
 # Q10
 def add_trees(t1, t2):
@@ -220,7 +268,18 @@ def add_trees(t1, t2):
         5
       5
     """
-    "*** YOUR CODE HERE ***"
+    if not t1:
+        return t2
+    if not t2:
+        return t1
+    new_entry = entry(t1) + entry(t2)
+    t1_children, t2_children = children(t1), children(t2)
+    length_t1, length_t2 = len(t1_children), len(t2_children)
+    if length_t1 < length_t2:
+        t1_children += [None for _ i range(length_t1, length_t2)]
+    if length_t2 < length_t1:
+        t2_children += [None for _ i range(length_t2, length_t1)]
+    return tree(new_entry, [add_trees(child1, child2) for child1, child2 in zip(t1_children, t2_children)])
 
 # Linked List definition
 empty = 'empty'

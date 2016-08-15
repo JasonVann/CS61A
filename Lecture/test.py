@@ -60,4 +60,34 @@ def foo(n):
     else:
         return 1 + foo(n - 2)
 
+def make_withdraw(balance):
+    b = [balance]
+    def withdraw(amount):
+        #nonlocal balance
+        if amount > b[0]:
+            return 'Insufficient funds'
+        b[0] = b[0] - amount
+        return b[0]
+    return withdraw
+
+
+def make_withdraw2(balance):
+    def withdraw(amount):
+        nonlocal balance
+        if amount > balance:
+            return 'Insufficient funds'
+        balance = balance - amount
+        return balance
+    return withdraw
+
+def addup(n, lst):
+    if n == 0:
+        return True
+    elif lst == []:
+        return False
+    else:
+        first, rest = lst[0], lst[1:]
+        return addup(n - first, rest) or \
+            addup(n, rest)
+
 
