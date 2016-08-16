@@ -58,3 +58,28 @@ def print_tree(t, indent=0):
     for child in children(t):
         print_tree(child, indent + 1)
 
+# Then Tree Class version
+class Tree:
+    def __init__(self, entry, children = []):
+        for c in children:
+            assert isinstance(c, Tree)
+        self.entry = entry
+        self.children = children
+    
+    def is_leaf(self):
+        return not self.children
+
+    def map(self, fn):
+        self.entry = fn(self.entry)
+        for c in self.children:
+            c.map(fn)
+
+    def __contains__(self, e):
+        if self.entry == e:
+            return True
+        for c in self.children:
+            if e in c:
+                return True
+        return False
+
+    

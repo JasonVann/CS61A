@@ -13,10 +13,16 @@ class ScaleIterator:
     [2, 4, 6, 8, 10]
     """
     def __init__(self, s, k):
-        "*** YOUR CODE HERE ***"
+        self.s = s
+        self.k = k
+        self.current = 0
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        "*** YOUR CODE HERE ***"
+        if self.current >= len(self.s):
+            raise StopIteration
+
+        self.current += 1
+        return self.s[self.current - 1] * self.k
