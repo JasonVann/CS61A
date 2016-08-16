@@ -87,7 +87,22 @@ class Link:
         >>> Link(1, Link(2)) + Link(3, Link(4, Link(5)))
         Link(1, Link(2, Link(3, Link(4, Link(5)))))
         """
-        "*** YOUR CODE HERE ***"
+        b = self.rest
+        res = Link.empty
+        while self != Link.empty:
+            res = Link(self.first, res)
+            self = self.rest
+
+        #other = Link.empty
+        while other != Link.empty:
+            res = Link(other.first, res)
+            other = other.rest
+
+        #print_link(res)
+        res = reversed(res)
+        #res.rest = other
+        return res
+
 
 # Q5
     def __reversed__(self):
@@ -96,8 +111,15 @@ class Link:
         >>> reversed(Link(1, Link(2, Link(3))))
         Link(3, Link(2, Link(1)))
         """
-        "*** YOUR CODE HERE ***"
-
+        a = self
+        first, rest = a.first, a.rest
+        res = Link.empty
+        while a.rest != Link.empty:
+            res = Link(first, res)
+            a = a.rest
+            first, rest = a.first, a.rest
+        res = Link(a.first, res)
+        return res
 # Q6
     def __str__(self):
         """Returns a human-readable string representation of the Link
@@ -110,7 +132,24 @@ class Link:
         >>> str(Link.empty)  # empty tuple
         '()'
         """
-        "*** YOUR CODE HERE ***"
+        if self == Link.empty:
+            return '()'
+
+        res = '<'
+        while self != Link.empty:
+            res += str(self.first) + ', '
+            self = self.rest
+        res = res[:-2]
+        res += '>'
+        return res
+
+        '''OR
+        string = '<'
+        while self.rest is not Link.empty:
+            string += str(self.first) + ', '
+            self = self.rest
+        return string + str(self.first) + '>'
+        '''
 
 # Q8
 class IteratorRestart:
@@ -134,13 +173,19 @@ class IteratorRestart:
     7
     """
     def __init__(self, start, end):
-        "*** YOUR CODE HERE ***"
+        self.start = start
+        self.end = end
+        self.current = start
 
     def __next__(self):
-        "*** YOUR CODE HERE ***"
+        if self.current > self.end:
+            raise StopIteration
+
+        self.current += 1
+        return self.current - 1
 
     def __iter__(self):
-        "*** YOUR CODE HERE ***"
+        return IteratorRestart(self.start, self.end)
 
 # Q9
 class Str:
@@ -157,4 +202,40 @@ class Str:
     >>> for char in s:    # a standard iterator does not restart
     ...     print(char)
     """
-    "*** YOUR CODE HERE ***"
+    def __init__(self, s):
+        self.s = s
+        self.current = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        #print('current', self.current)
+        if self.current >= len(self.s):
+            raise StopIteration
+
+        self.current += 1
+        return self.s[self.current - 1]
+
+def print_link(link):
+    """Print elements of a linked list link.
+
+    >>> link = Link(1, Link(2, Link(3)))
+    >>> print_link(link)
+    <1 2 3>
+    >>> link1 = Link(1, Link(Link(2), Link(3)))
+    >>> print_link(link1)
+    <1 <2> 3>
+    >>> link1 = Link(3, Link(Link(4), Link(5, Link(6))))
+    >>> print_link(link1)
+    <3 <4> 5 6>
+    """
+    print('<' + helper(link).rstrip() + '>')
+
+def helper(link):
+    if link == Link.empty:
+        return ''
+    elif isinstance(link.first, Link):
+        return '<' + helper(link.first).rstrip() + '> ' + helper(link.rest)
+    else:
+        return str(link.first) +' '+  helper(link.rest)
