@@ -100,7 +100,12 @@ def cumulative_sum(t):
     >>> t
     Tree(16, [Tree(8, [Tree(5)]), Tree(7)])
     """
-    "*** YOUR CODE HERE ***"
+    for a in t.children:
+        cumulative_sum(a)
+
+
+    t.entry = sum([a.entry for a in t.children]) + t.entry
+
 
 # Q4
 
@@ -156,7 +161,18 @@ def add_up(n, lst):
     >>> add_up(50002, range(0, 200000, 2))
     True
     """
-    "*** YOUR CODE HERE ***"
+    s = set(lst)
+    for a in s:
+        if n - a in s and n - a != a:
+            return True
+
+    return False
+
+    # OR
+    '''
+    check_set = { n - elem for elem in lst if n != 2 * elem }
+    return bool(check_set & set(lst))
+    '''
 
 # Q6
 
@@ -177,4 +193,6 @@ def missing_val(lst0, lst1):
     >>> timeit(lambda: missing_val(big0, big1)) < 1.0
     True
     """
-    "*** YOUR CODE HERE ***"
+    a = set(lst0)
+    b = set(lst1)
+    return (a - b).pop()

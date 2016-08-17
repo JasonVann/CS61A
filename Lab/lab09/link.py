@@ -125,5 +125,24 @@ def remove_duplicates(link):
     #print(lnk)
     return lnk
 
-lnk = Link(1, Link(1, Link(1, Link(1, Link(5, Link(5, Link(6))))))
-)
+lnk = Link(1, Link(1, Link(1, Link(1, Link(5, Link(5, Link(6)))))))
+
+def reverse(lnk):
+    # TODO:??
+    if lnk == Link.empty or lnk.rest == Link.empty:
+        return lnk
+    rest_rev = reverse(lnk.rest)
+    #rest_rev = Link(rest_rev, lnk.first)
+    print('a', rest_rev)
+    print(lnk)
+    lnk.rest.rest = lnk
+    print('b', rest_rev)
+    print(lnk)
+    lnk.rest = Link.empty
+    print('c', rest_rev)
+    print(lnk)
+
+    return rest_rev
+
+a = Link(1, Link(2, Link(3)))
+
