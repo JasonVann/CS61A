@@ -100,3 +100,30 @@ class Link:
         self.first = f(self.first)
         if self.rest is not Link.empty:
             self.rest.map(f)
+
+def remove_duplicates(link):
+    if lnk == Link.empty:
+        return
+    seen = {lnk.first}
+    current = lnk
+    while current.rest != Link.empty:
+        if current.rest.first not in seen:
+            seen.add(current.rest.first)
+            print('a', current)
+            print(lnk)
+            current = current.rest
+            print('b', current)
+            print('b2', lnk)
+        else:
+            print('c',current)
+            print(lnk)
+            print(current == lnk, current == lnk.rest)
+            current.rest = current.rest.rest
+            print('d',current)
+            print('d2', lnk)
+    #print(current)
+    #print(lnk)
+    return lnk
+
+lnk = Link(1, Link(1, Link(1, Link(1, Link(5, Link(5, Link(6))))))
+)
