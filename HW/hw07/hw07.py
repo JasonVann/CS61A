@@ -21,6 +21,14 @@ class Link:
         self.first = first
         self.rest = rest
 
+    def __repr__(self):
+        if self.rest is Link.empty:
+            return 'Link({})'.format(
+                self.first)
+        else:
+            return 'Link({}, {})'.format(
+                self.first, repr(self.rest))
+
 # Q1
 
 def link_to_list(link):
@@ -55,7 +63,17 @@ def has_cycle(link):
     >>> has_cycle(u)
     False
     """
-    "*** YOUR CODE HERE ***"
+    # From website
+    links = []
+    while link is not Link.empty:
+        if link in links:
+            #print('a', link)
+            #print(links)
+            return True
+        links.append(link)
+        link = link.rest
+    #print('b', links)
+    return False
 
 def has_cycle_constant(link):
     """Return whether link contains a cycle.
