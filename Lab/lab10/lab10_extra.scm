@@ -9,17 +9,25 @@
 
 ; Q6
 (define lst
-  'YOUR-CODE-HERE
+    (list (list 1)
+        (list 2 
+            (list 
+                (list 3 4) 
+                (list 5))))
 )
 
 ; Q7
 (define (composed f g)
-  'YOUR-CODE-HERE
+    (lambda (x) 
+        (f (g x)))
 )
 
 ; Q8
 (define (remove item lst)
-  'YOUR-CODE-HERE
+    (cond ((null? lst) '())
+        ((eq? item (car lst)) (remove item (cdr lst)))
+        (else (cons (car lst) (remove item (cdr lst))))
+        )
 )
 
 
@@ -46,7 +54,7 @@
 
 ; Q10
 (define (no-repeats s)
-  'YOUR-CODE-HERE
+    
 )
 
 ; Q11
