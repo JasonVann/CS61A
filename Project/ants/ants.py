@@ -153,6 +153,7 @@ class Bee(Insect):
         colony -- The AntColony, used to access game state information.
         """
         if self.blocked():
+            print(156, self.place.ant.armor)
             self.sting(self.place.ant)
         elif self.armor > 0 and self.place.exit is not None:
             self.move_to(self.place.exit)
@@ -214,7 +215,8 @@ class ThrowerAnt(Ant):
         bees = []
 
         for i in range(self.min_range):
-            place = place.entrance
+            if (not isinstance(place, Hive)) and isinstance(place, Place):
+                place = place.entrance
 
         for i in range(self.min_range, self.max_range):
             if (not isinstance(place, Hive)) and isinstance(place, Place):
@@ -224,7 +226,7 @@ class ThrowerAnt(Ant):
                     break
                 else:
                     place = place.entrance
-            i += 1
+            #i += 1
         '''
         while (not isinstance(place, Hive)) and isinstance(place, Place):
             #print(209, place, place.bees, place.entrance, place.exit, self.place.exit, self.place)
@@ -327,7 +329,8 @@ class WallAnt(Ant):
     def __init__(self):
         Ant.__init__(self)
         self.armor = 4
-        
+    
+
 # The WallAnt class
 # END Problem 5A
 
@@ -352,7 +355,12 @@ class NinjaAnt(Ant):
 
 
 # BEGIN Problem 5B
-"*** REPLACE THIS LINE ***"
+class ScubaThrower(ThrowerAnt):
+    name = 'Scuba'
+    food_cost = 6
+    implemented = True
+    watersafe = True
+
 # The ScubaThrower class
 # END Problem 5B
 
@@ -363,23 +371,31 @@ class HungryAnt(Ant):
     """
     name = 'Hungry'
     # BEGIN Problem 6B
-    "*** REPLACE THIS LINE ***"
-    implemented = False   # Change to True to view in the GUI
+    food_cost = 4
+    time_to_digest = 3
+    armor = 1
+    implemented = True   # Change to True to view in the GUI
     # END Problem 6B
 
     def __init__(self):
         # BEGIN Problem 6B
-        "*** REPLACE THIS LINE ***"
+        self.digesting = 0
         # END Problem 6B
 
     def eat_bee(self, bee):
         # BEGIN Problem 6B
-        "*** REPLACE THIS LINE ***"
+        bee.reduce_armor(bee.armor)
         # END Problem 6B
 
     def action(self, colony):
         # BEGIN Problem 6B
-        "*** REPLACE THIS LINE ***"
+        if self.digesting > 0:
+            self.digesting -= 1
+        else:
+            if len(self.place.bees) > 0:
+                bee = random.choice(self.place.bees)
+                self.eat_bee(bee)
+                self.digesting = self.time_to_digest
         # END Problem 6B
 
 
@@ -388,7 +404,8 @@ class BodyguardAnt(Ant):
     name = 'Bodyguard'
     # BEGIN Problem 7
     "*** REPLACE THIS LINE ***"
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
+    food_cost = 4
     # END Problem 7
 
     def __init__(self):
