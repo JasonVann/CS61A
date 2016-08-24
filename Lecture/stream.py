@@ -8,12 +8,15 @@ class Stream:
         assert callable(compute_rest), 'compute_rest must be callable.'
         self.first = first
         self._compute_rest = compute_rest
+        #self._rest = compute_rest()
     @property
     def rest(self):
         """Return the rest of the stream, computing it if necessary."""
+        
         if self._compute_rest is not None:
             self._rest = self._compute_rest()
             self._compute_rest = None
+        
         return self._rest
     def __repr__(self):
         return 'Stream({0}, <...>)'.format(repr(self.first))
@@ -51,8 +54,10 @@ def first_k_as_list(s, k):
 
 def primes(pos_stream):
     def not_divible(x):
+        print(57, pos_stream.first)
         return x % pos_stream.first != 0
     def compute_rest():
+        print(59, pos_stream.rest)
         return primes(filter_stream(not_divible, pos_stream.rest))
     return Stream(pos_stream.first, compute_rest)
 
